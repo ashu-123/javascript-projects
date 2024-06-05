@@ -1,9 +1,8 @@
 // index.js
 // "use strict";
 
-import { generateFilm } from "./template";
-
-import('./api').then(({ getPassedFilms}) => {
+import { getPassedFilms } from "./api.js";
+import { generateFilm } from "./template.js";
 
 const loadButton = document.getElementById("loadButton");
 const busyMsg = document.getElementById("busyMsg");
@@ -24,5 +23,3 @@ function createGrid(data) {
 
   results.innerHTML = html;
 }
-}
-)
