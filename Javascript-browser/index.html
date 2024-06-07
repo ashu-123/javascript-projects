@@ -166,6 +166,13 @@
         document.querySelector("footer div").childNodes[1].innerHTML = new Date().getFullYear();
         document.querySelector("footer div").classList.remove("font-xxlarge");
         document.querySelector("footer div").classList.add("font-large");
+
+        function removeFromCart(idx) {
+            let items = document.querySelectorAll("#eventtable table tbody tr");
+            if(idx<items.length) {
+                items[idx].remove();
+            }
+        }
     </script>
   </body>
 </html>
