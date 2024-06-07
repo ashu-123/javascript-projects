@@ -184,6 +184,15 @@
                 items[idx].remove();
             }
         }
+
+        let btns = document.querySelectorAll('button');
+        btns.forEach(btn => {btn.onclick = () => addToCart();});
+
+        function addToCart() {
+            let spanTickets = document.getElementById('spanTickets');
+            let count = parseInt(spanTickets.textContent) ?? 0;
+            spanTickets.textContent = count + 1;
+        }
     </script>
   </body>
 </html>
