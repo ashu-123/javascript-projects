@@ -16,55 +16,92 @@
         // document.querySelector("#current-year").innerHTML = new Date().getFullYear();
         document.addEventListener("DOMContentLoaded", () => {
             let placeholder = document.querySelector("footer div");
-        placeholder.childNodes[1].innerHTML = new Date().getFullYear();
-        placeholder.classList.remove("font-xxlarge");
-        placeholder.classList.add("font-large");
+            placeholder.childNodes[1].innerHTML = new Date().getFullYear();
+            placeholder.classList.remove("font-xxlarge");
+            placeholder.classList.add("font-large");
 
-        placeholder.lastChild.remove();
+            placeholder.lastChild.remove();
 
-        let a = document.createElement("a");
-        a.setAttribute("href", "./index.html");
+            let a = document.createElement("a");
+            a.setAttribute("href", "./index.html");
 
-        let a_text = document.createTextNode("GloboTicket");
-        a.appendChild(a_text);
+            let a_text = document.createTextNode("GloboTicket");
+            a.appendChild(a_text);
 
-        placeholder.appendChild(a);
-        function removeFromCart(idx) {
-            let items = document.querySelectorAll("#eventtable table tbody tr");
-            if (idx < items.length) {
-                items[idx].remove();
-            }
-        }
-
-        let btns = document.querySelectorAll('button');
-        // btns.forEach(btn => {btn.onclick = () => addToCart();});
-
-        btns.forEach(btn => {
-            btn.addEventListener("click", addToCart, { once: true });
-        })
-
-        function getCartItemCount() {
-            let spanTickets = document.getElementById("spanTickets");
-            return parseInt(spanTickets.textContent) ?? 0;
-        }
-
-        function addToCart() {
-            let count = getCartItemCount();
-            spanTickets.textContent = count + 1;
-        }
-
-        document.querySelector("a[href='./cart.html']").addEventListener(
-            "click",
-            (e) => {
-                let count = getCartItemCount();
-                if (count === 0) {
-                    alert("Cart is empty!");
-                    e.preventDefault();
+            placeholder.appendChild(a);
+            function removeFromCart(idx) {
+                let items = document.querySelectorAll("#eventtable table tbody tr");
+                if (idx < items.length) {
+                    items[idx].remove();
                 }
             }
-        )
+
+            let btns = document.querySelectorAll('button');
+            // btns.forEach(btn => {btn.onclick = () => addToCart();});
+
+            btns.forEach(btn => {
+                btn.addEventListener("click", addToCart, { once: true });
+            })
+
+            function getCartItemCount() {
+                let spanTickets = document.getElementById("spanTickets");
+                return parseInt(spanTickets.textContent) ?? 0;
+            }
+
+            function addToCart() {
+                let count = getCartItemCount();
+                spanTickets.textContent = count + 1;
+            }
+            let cart = document.querySelector("a[href='./cart.html']");
+            cart.addEventListener(
+                "click",
+                (e) => {
+                    let count = getCartItemCount();
+                    if (count === 0) {
+                        alert("Cart is empty!");
+                        e.preventDefault();
+                    }
+                }
+            )
+
+            let btnCart = document.querySelector("span[class~='bi-cart-plus-fill']");
+            btnCart.addEventListener(
+                "mouseenter",
+                (e) => e.target.classList.add("cart-highlight")
+            );
+            btnCart.addEventListener(
+                "mouseleave",
+                (e) => e.target.classList.remove("cart-highlight")
+            );
+
+            document.querySelectorAll("#eventtable table tbody tr").forEach(
+                (row) => row.addEventListener(
+                    "dragstart",
+                    (e) => e.dataTransfer.setData("text/plain", e.target.innerText)
+                )
+            );
+
+            cart.addEventListener(
+                "dragenter",
+                (e) => e.preventDefault()
+            );
+
+            cart.addEventListener(
+                "dragover",
+                (e) => e.preventDefault()
+            );
+
+            cart.addEventListener(
+                "drop",
+                (e) => {
+                    e.preventDefault();
+                    console.log(e.dataTransfer.getData("text/plain"));
+                    addToCart();
+                }
+            )
+
         });
-        
+
 
     </script>
 </head>
@@ -110,7 +147,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="align-middle">
+                        <tr class="align-middle" draggable="true">
                             <td>
                                 <img class="img-fluid max-100" src="img/logos/Container-Enthusiasm-TalkDocker-To-Me.png"
                                     alt="Cover" />
@@ -132,7 +169,7 @@
                                     to Cart</button>
                             </td>
                         </tr>
-                        <tr class="align-middle">
+                        <tr class="align-middle" draggable="true">
                             <td>
                                 <img class="img-fluid max-100" src="img/logos/DigitalCowboys_BinaryBovine.png"
                                     alt="Cover" />
@@ -154,7 +191,7 @@
                                     to Cart</button>
                             </td>
                         </tr>
-                        <tr class="align-middle">
+                        <tr class="align-middle" draggable="true">
                             <td>
                                 <img class="img-fluid max-100" src="img/logos/GitOuttaMyHub-CodeEmpire.png"
                                     alt="Cover" />
@@ -176,7 +213,7 @@
                                     to Cart</button>
                             </td>
                         </tr>
-                        <tr class="align-middle">
+                        <tr class="align-middle" draggable="true">
                             <td>
                                 <img class="img-fluid max-100" src="img/logos/Memory-Allocation-The-Cache.png"
                                     alt="Cover" />
@@ -198,7 +235,7 @@
                                     to Cart</button>
                             </td>
                         </tr>
-                        <tr class="align-middle">
+                        <tr class="align-middle" draggable="true">
                             <td>
                                 <img class="img-fluid max-100"
                                     src="img/logos/Network-Firewall-Squad---For-Those-About-to-Block,-We-Salute-You.png"
