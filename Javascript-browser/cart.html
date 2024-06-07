@@ -161,17 +161,25 @@
         </footer>
     </div>
     <script>
-        [...document.getElementsByTagName("button")].forEach(
-            button => button.addEventListener("click", removeItemFromCart)
+        document.getElementById("carttable").addEventListener(
+            "click",
+            removeItemFromCart
         );
 
         function removeItemFromCart(e) {
-            let row = e.target.parentNode.parentNode;
-            if (row.tagName !== "TR") {
-                row = row.parentNode;
+            let el = e.target;
+            let row = null;
+            if (el.tagName === "BUTTON") {
+                row = el.parentNode.parentNode;
+            } else if (el.tagName === "SPAN" && el.classList.contains("bi-cart-x-fill")) {
+                row = el.parentNode.parentNode.parentNode;
             }
-            let idx = row.getAttribute("data-idx");
-            removeFromCart(idx);
+            if (row !== null) {
+                let idx = row.getAttribute("data-idx");
+                removeFromCart(idx);
+
+                e.stopPropagation();
+            }
         }
 
         function removeFromCart(idx) {
