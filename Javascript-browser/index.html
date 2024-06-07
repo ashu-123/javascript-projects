@@ -11,6 +11,62 @@
     <link rel="stylesheet" href="css/styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Globoticket</title>
+    <script>
+        // document.getElementById('current-year').innerHTML = new Date().getFullYear();
+        // document.querySelector("#current-year").innerHTML = new Date().getFullYear();
+        window.addEventListener("load", () => {
+            let placeholder = document.querySelector("footer div");
+        placeholder.childNodes[1].innerHTML = new Date().getFullYear();
+        placeholder.classList.remove("font-xxlarge");
+        placeholder.classList.add("font-large");
+
+        placeholder.lastChild.remove();
+
+        let a = document.createElement("a");
+        a.setAttribute("href", "./index.html");
+
+        let a_text = document.createTextNode("GloboTicket");
+        a.appendChild(a_text);
+
+        placeholder.appendChild(a);
+        function removeFromCart(idx) {
+            let items = document.querySelectorAll("#eventtable table tbody tr");
+            if (idx < items.length) {
+                items[idx].remove();
+            }
+        }
+
+        let btns = document.querySelectorAll('button');
+        // btns.forEach(btn => {btn.onclick = () => addToCart();});
+
+        btns.forEach(btn => {
+            btn.addEventListener("click", addToCart, { once: true });
+        })
+
+        function getCartItemCount() {
+            let spanTickets = document.getElementById("spanTickets");
+            return parseInt(spanTickets.textContent) ?? 0;
+        }
+
+        function addToCart() {
+            let count = getCartItemCount();
+            spanTickets.textContent = count + 1;
+        }
+
+        document.querySelector("a[href='./cart.html']").addEventListener(
+            "click",
+            (e) => {
+                let count = getCartItemCount();
+                if (count === 0) {
+                    alert("Cart is empty!");
+                    e.preventDefault();
+                }
+            }
+        )
+        });
+        
+
+    </script>
 </head>
 
 <body>
@@ -175,60 +231,6 @@
             </div>
         </footer>
     </div>
-    <script>
-        // document.getElementById('current-year').innerHTML = new Date().getFullYear();
-        // document.querySelector("#current-year").innerHTML = new Date().getFullYear();
-
-        let placeholder = document.querySelector("footer div");
-        placeholder.childNodes[1].innerHTML = new Date().getFullYear();
-        placeholder.classList.remove("font-xxlarge");
-        placeholder.classList.add("font-large");
-
-        placeholder.lastChild.remove();
-
-        let a = document.createElement("a");
-        a.setAttribute("href", "./index.html");
-
-        let a_text = document.createTextNode("GloboTicket");
-        a.appendChild(a_text);
-
-        placeholder.appendChild(a);
-        function removeFromCart(idx) {
-            let items = document.querySelectorAll("#eventtable table tbody tr");
-            if (idx < items.length) {
-                items[idx].remove();
-            }
-        }
-
-        let btns = document.querySelectorAll('button');
-        // btns.forEach(btn => {btn.onclick = () => addToCart();});
-
-        btns.forEach(btn => {
-            btn.addEventListener("click", addToCart, { once: true });
-        })
-
-        function getCartItemCount() {
-            let spanTickets = document.getElementById("spanTickets");
-            return parseInt(spanTickets.textContent) ?? 0;
-        }
-
-        function addToCart() {
-            let count = getCartItemCount();
-            spanTickets.textContent = count + 1;
-        }
-
-        document.querySelector("a[href='./cart.html']").addEventListener(
-            "click",
-            (e) => {
-                let count = getCartItemCount();
-                if (count === 0) {
-                    alert("Cart is empty!");
-                    e.preventDefault();
-                }
-            }
-        )
-
-    </script>
 </body>
 
 </html>
