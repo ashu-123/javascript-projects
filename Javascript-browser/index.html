@@ -156,9 +156,12 @@
         </div>
         <footer class="bg-dark fixed-bottom">
             <div class="text-center text-white font-xxlarge">
-                &copy; Globoticket
+                &copy; <span id="current-year"></span>Globoticket
             </div>
         </footer>
     </div>
+    <script>
+        document.getElementById('current-year').innerHTML = new Date().getFullYear();
+    </script>
   </body>
 </html>
