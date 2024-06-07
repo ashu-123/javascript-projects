@@ -14,7 +14,7 @@
     <script>
         // document.getElementById('current-year').innerHTML = new Date().getFullYear();
         // document.querySelector("#current-year").innerHTML = new Date().getFullYear();
-        window.addEventListener("load", () => {
+        document.addEventListener("DOMContentLoaded", () => {
             let placeholder = document.querySelector("footer div");
         placeholder.childNodes[1].innerHTML = new Date().getFullYear();
         placeholder.classList.remove("font-xxlarge");
