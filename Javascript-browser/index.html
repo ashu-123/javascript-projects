@@ -189,7 +189,7 @@
         // btns.forEach(btn => {btn.onclick = () => addToCart();});
 
         btns.forEach(btn => {
-            btn.addEventListener("click", addToCart);
+            btn.addEventListener("click", addToCart, {once: true});
         })
 
         function addToCart() {
@@ -197,7 +197,7 @@
             let count = parseInt(spanTickets.textContent) ?? 0;
             spanTickets.textContent = count + 1;
 
-            btns[1].removeEventListener("click", addToCart);
+            // btns[1].removeEventListener("click", addToCart);
         }
     </script>
   </body>
