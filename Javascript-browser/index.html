@@ -51,6 +51,7 @@
             function addToCart() {
                 let count = getCartItemCount();
                 spanTickets.textContent = count + 1;
+                undoCount++;
             }
             let cart = document.querySelector("a[href='./cart.html']");
             cart.addEventListener(
@@ -97,6 +98,26 @@
                     e.preventDefault();
                     console.log(e.dataTransfer.getData("text/plain"));
                     addToCart();
+                }
+            )
+
+            function removeFromCart() {
+                let count = getCartItemCount();
+                spanTickets.textContent = Math.max(count - 1, 0);
+            }
+
+            let undoCount = 0;
+
+            document.addEventListener(
+                "keyup",
+                (e) => {
+                    if (e.key === "z" && e.ctrlKey) {
+                        e.preventDefault();
+                        if (undoCount > 0) {
+                            undoCount--;
+                            removeFromCart();
+                        }
+                    }
                 }
             )
 
