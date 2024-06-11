@@ -44,11 +44,50 @@ function log(target, context) {
   }
   return resultMethod;
 }
+
+class Metric {
+  constructor(name) {
+    this.name = name;
+  }
+
+  time() {
+    const metricThis = this;
+    return function (target, context) {
+      const resultMethod = async function(...args) {
+        const start = Date.now();
+
+        try {
+          return await target.apply(this, args);
+        }
+        finally {
+          const end = Date.now();
+          const timeMs = end - start;
+
+          console.log(`@time - Metric ${metricThis.name} value ${timeMs} to execute`);
+        }
+      }
+
+      return resultMethod;
+    }
+  }
+}
+
+function createMetric(name) {
+  return new Metric(name);
+}
+
+function logAndRetry(target, context) {
+  const retryDecorator = retry({delay: 2000, maxRetryAttempts: 3});
+  const targetWithRetry = retryDecorator(target, context);
+  return log(targetWithRetry, context); 
+}
+const weatherTiming = createMetric('weather.timing');
+
 class WeatherAPI {
   apiVersion = 'v1'
 
-  @retry({ maxRetryAttempts: 4, delay: 2000 })
-  @log
+  @logAndRetry
+  @weatherTiming.time()
   async getWeather(city) {
     console.log(`Getting weather for ${city}`)
 

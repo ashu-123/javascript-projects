@@ -43,13 +43,43 @@ function log(target, context) {
   };
   return resultMethod;
 }
-_dec = retry({
-  maxRetryAttempts: 4,
-  delay: 2000
-});
+class Metric {
+  constructor(name) {
+    this.name = name;
+  }
+  time() {
+    const metricThis = this;
+    return function (target, context) {
+      const resultMethod = async function (...args) {
+        const start = Date.now();
+        try {
+          return await target.apply(this, args);
+        } finally {
+          const end = Date.now();
+          const timeMs = end - start;
+          console.log(`@time - Metric ${metricThis.name} value ${timeMs} to execute`);
+        }
+      };
+      return resultMethod;
+    };
+  }
+}
+function createMetric(name) {
+  return new Metric(name);
+}
+function logAndRetry(target, context) {
+  const retryDecorator = retry({
+    delay: 2000,
+    maxRetryAttempts: 3
+  });
+  const targetWithRetry = retryDecorator(target, context);
+  return log(targetWithRetry, context);
+}
+const weatherTiming = createMetric('weather.timing');
+_dec = weatherTiming.time();
 class WeatherAPI {
   static {
-    [_initProto] = _applyDecs(this, [[[_dec, log], 2, "getWeather"]], []).e;
+    [_initProto] = _applyDecs(this, [[[logAndRetry, _dec], 2, "getWeather"]], []).e;
   }
   apiVersion = (_initProto(this), 'v1');
   async getWeather(city) {
