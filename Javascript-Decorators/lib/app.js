@@ -32,13 +32,24 @@ function retry(retryOptions) {
     return resultMethod;
   };
 }
+function log(target, context) {
+  const resultMethod = async function (...args) {
+    console.log(`@log - Running the ${context.name} method`);
+    try {
+      return await target.apply(this, args);
+    } finally {
+      console.log(`@log - Method ${context.name} finished`);
+    }
+  };
+  return resultMethod;
+}
 _dec = retry({
   maxRetryAttempts: 4,
   delay: 2000
 });
 class WeatherAPI {
   static {
-    [_initProto] = _applyDecs(this, [[_dec, 2, "getWeather"]], []).e;
+    [_initProto] = _applyDecs(this, [[[_dec, log], 2, "getWeather"]], []).e;
   }
   apiVersion = (_initProto(this), 'v1');
   async getWeather(city) {

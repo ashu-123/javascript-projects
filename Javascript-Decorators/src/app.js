@@ -30,13 +30,25 @@ function retry(retryOptions) {
     }
     return resultMethod;
   }
+}
 
-  
+function log(target, context) {
+  const resultMethod = async function(...args) {
+    console.log(`@log - Running the ${context.name} method`);
+    try {
+      return await target.apply(this, args);
+    }
+    finally {
+      console.log(`@log - Method ${context.name} finished`);
+    }
+  }
+  return resultMethod;
 }
 class WeatherAPI {
   apiVersion = 'v1'
 
-  @retry({maxRetryAttempts: 4, delay: 2000})
+  @retry({ maxRetryAttempts: 4, delay: 2000 })
+  @log
   async getWeather(city) {
     console.log(`Getting weather for ${city}`)
 
