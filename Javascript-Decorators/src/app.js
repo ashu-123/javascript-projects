@@ -138,7 +138,14 @@
 
 // ----------------------------------------------------------------------------------------------------------------
 
-import { Controller, Get, startApp } from './framework.js';
+import { Controller, Get, startApp, Inject, Injectable } from './framework.js';
+
+@Injectable('CitiesDB')
+class CitiesDB {
+  getCities() {
+    return ['Kanpur', 'Lucknow'];
+  }
+}
 
 @Controller('/api')
 class WeatherController {
@@ -157,10 +164,13 @@ class WeatherController {
 @Controller('/api')
 class CitiesController {
 
+  @Inject('CitiesDB')
+  citiesDB;
+
   @Get('/cities')
   getCities() {
     return {
-      cities: ['Kanpur, Lucknow']
+      cities: this.citiesDB.getCities()
     };
   }
 }
