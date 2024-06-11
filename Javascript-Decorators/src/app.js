@@ -1,135 +1,168 @@
-// function sleep(ms) {
-//   return new Promise((resolve) => setTimeout(resolve, ms));
-// }
+// // function sleep(ms) {
+// //   return new Promise((resolve) => setTimeout(resolve, ms));
+// // }
 
-// // Decorator function
-// function retry(retryOptions) {
-//   return function (target, context) {
-//     console.log("Applying retry decorator");
+// // // Decorator function
+// // function retry(retryOptions) {
+// //   return function (target, context) {
+// //     console.log("Applying retry decorator");
 
-//     const resultMethod = async function (...args) {
-//       console.log('@retry - Running the retry decorator');
-//       let lastError;
+// //     const resultMethod = async function (...args) {
+// //       console.log('@retry - Running the retry decorator');
+// //       let lastError;
 
-//       for (let attemptNum = 1; attemptNum <= retryOptions.maxRetryAttempts; attemptNum++) {
-//         try {
-//           console.log(`@retry - Attempt #${attemptNum}`);
-//           return await target.apply(this, args);
+// //       for (let attemptNum = 1; attemptNum <= retryOptions.maxRetryAttempts; attemptNum++) {
+// //         try {
+// //           console.log(`@retry - Attempt #${attemptNum}`);
+// //           return await target.apply(this, args);
 
-//         }
-//         catch (err) {
-//           lastError = err;
-//           if (attemptNum < retryOptions.maxRetryAttempts) {
-//             console.log('@retry - Retrying..');
-//             await sleep(retryOptions.delay);
-//           }
-//         }
-//       }
+// //         }
+// //         catch (err) {
+// //           lastError = err;
+// //           if (attemptNum < retryOptions.maxRetryAttempts) {
+// //             console.log('@retry - Retrying..');
+// //             await sleep(retryOptions.delay);
+// //           }
+// //         }
+// //       }
 
-//       throw lastError;
-//     }
-//     return resultMethod;
-//   }
-// }
+// //       throw lastError;
+// //     }
+// //     return resultMethod;
+// //   }
+// // }
 
-// function log(target, context) {
-//   const resultMethod = async function(...args) {
-//     console.log(`@log - Running the ${context.name} method`);
-//     try {
-//       return await target.apply(this, args);
-//     }
-//     finally {
-//       console.log(`@log - Method ${context.name} finished`);
-//     }
-//   }
-//   return resultMethod;
-// }
+// // function log(target, context) {
+// //   const resultMethod = async function(...args) {
+// //     console.log(`@log - Running the ${context.name} method`);
+// //     try {
+// //       return await target.apply(this, args);
+// //     }
+// //     finally {
+// //       console.log(`@log - Method ${context.name} finished`);
+// //     }
+// //   }
+// //   return resultMethod;
+// // }
 
-// class Metric {
-//   constructor(name) {
-//     this.name = name;
-//   }
+// // class Metric {
+// //   constructor(name) {
+// //     this.name = name;
+// //   }
 
-//   time() {
-//     const metricThis = this;
-//     return function (target, context) {
-//       const resultMethod = async function(...args) {
-//         const start = Date.now();
+// //   time() {
+// //     const metricThis = this;
+// //     return function (target, context) {
+// //       const resultMethod = async function(...args) {
+// //         const start = Date.now();
 
-//         try {
-//           return await target.apply(this, args);
-//         }
-//         finally {
-//           const end = Date.now();
-//           const timeMs = end - start;
+// //         try {
+// //           return await target.apply(this, args);
+// //         }
+// //         finally {
+// //           const end = Date.now();
+// //           const timeMs = end - start;
 
-//           console.log(`@time - Metric ${metricThis.name} value ${timeMs} to execute`);
-//         }
-//       }
+// //           console.log(`@time - Metric ${metricThis.name} value ${timeMs} to execute`);
+// //         }
+// //       }
 
-//       return resultMethod;
-//     }
-//   }
-// }
+// //       return resultMethod;
+// //     }
+// //   }
+// // }
 
-// function createMetric(name) {
-//   return new Metric(name);
-// }
+// // function createMetric(name) {
+// //   return new Metric(name);
+// // }
 
-// function logAndRetry(target, context) {
-//   const retryDecorator = retry({delay: 2000, maxRetryAttempts: 3});
-//   const targetWithRetry = retryDecorator(target, context);
-//   return log(targetWithRetry, context); 
-// }
-// const weatherTiming = createMetric('weather.timing');
+// // function logAndRetry(target, context) {
+// //   const retryDecorator = retry({delay: 2000, maxRetryAttempts: 3});
+// //   const targetWithRetry = retryDecorator(target, context);
+// //   return log(targetWithRetry, context); 
+// // }
+// // const weatherTiming = createMetric('weather.timing');
 
-// class WeatherAPI {
-//   apiVersion = 'v1'
+// // class WeatherAPI {
+// //   apiVersion = 'v1'
 
-//   @logAndRetry
-//   @weatherTiming.time()
-//   async getWeather(city) {
-//     console.log(`Getting weather for ${city}`)
+// //   @logAndRetry
+// //   @weatherTiming.time()
+// //   async getWeather(city) {
+// //     console.log(`Getting weather for ${city}`)
 
-//     if (Math.random() < 0.75) throw new Error('Something went wrong')
-//     return {
-//       apiVersion: this.apiVersion,
-//       temperature: 20,
-//       humidity: 80,
-//       city: city,
-//     }
-//   }
-// }
+// //     if (Math.random() < 0.75) throw new Error('Something went wrong')
+// //     return {
+// //       apiVersion: this.apiVersion,
+// //       temperature: 20,
+// //       humidity: 80,
+// //       city: city,
+// //     }
+// //   }
+// // }
 
-// async function main() {
-//   const weatherAPI = new WeatherAPI()
-//   console.log(await weatherAPI.getWeather('London'))
-//   console.log(await weatherAPI.getWeather('Dublin'))
-// }
+// // async function main() {
+// //   const weatherAPI = new WeatherAPI()
+// //   console.log(await weatherAPI.getWeather('London'))
+// //   console.log(await weatherAPI.getWeather('Dublin'))
+// // }
 
-// main().catch(console.error)
+// // main().catch(console.error)
 
-import express from 'express';
+// // -----------------------------------------------------------------------------------------------------
 
-const app = express();
+// import express from 'express';
 
-const port = 3000;
+// const app = express();
 
-app.get('/api/forecast', (req, res) => {
-  res.json({
-    apiVersion: 'v1',
-    temperature: 28,
-    humidity: 80,
-    city: 'Kanpur'
-  });
-});
+// const port = 3000;
 
-app.get('/api/cities', (req, res) => {
-  res.json({
-    cities: ['Kanpur', 'Lucknow']
-  });
-});
+// app.get('/api/forecast', (req, res) => {
+//   res.json({
+//     apiVersion: 'v1',
+//     temperature: 28,
+//     humidity: 80,
+//     city: 'Kanpur'
+//   });
+// });
 
-app.listen(port, function () {
-  console.log(`Server listening on port ${port}`);
-})
+// app.get('/api/cities', (req, res) => {
+//   res.json({
+//     cities: ['Kanpur', 'Lucknow']
+//   });
+// });
+
+// app.listen(port, function () {
+//   console.log(`Server listening on port ${port}`);
+// })
+
+// ----------------------------------------------------------------------------------------------------------------
+
+import { Controller, Get, startApp } from './framework.js';
+
+@Controller('/api')
+class WeatherController {
+
+  @Get('/forecast')
+  getForecast() {
+    return {
+      apiVersion: 'v1',
+      temperature: 28,
+      humidity: 80,
+      city: 'Kanpur'
+    };
+  }
+}
+
+@Controller('/api')
+class CitiesController {
+
+  @Get('/cities')
+  getCities() {
+    return {
+      cities: ['Kanpur, Lucknow']
+    };
+  }
+}
+
+startApp();
