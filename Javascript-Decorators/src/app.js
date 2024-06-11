@@ -3,38 +3,40 @@ function sleep(ms) {
 }
 
 // Decorator function
-function retry(target, context) {
-  console.log("Applying retry decorator");
+function retry(retryOptions) {
+  return function (target, context) {
+    console.log("Applying retry decorator");
 
-  const resultMethod = async function(...args) {
-    console.log('@retry - Running the retry decorator');
-    const maxRetryAttempts = 3;
-    let lastError;
+    const resultMethod = async function (...args) {
+      console.log('@retry - Running the retry decorator');
+      let lastError;
 
-    for(let attemptNum=1;attemptNum<=maxRetryAttempts;attemptNum++) {
-      try {
-        console.log(`@retry - Attempt #${attemptNum}`);
-        return await target.apply(this, args);
+      for (let attemptNum = 1; attemptNum <= retryOptions.maxRetryAttempts; attemptNum++) {
+        try {
+          console.log(`@retry - Attempt #${attemptNum}`);
+          return await target.apply(this, args);
 
-      }
-      catch(err) {
-        lastError = err;
-        if(attemptNum<maxRetryAttempts) {
-          console.log('@retry - Retrying..');
-          await sleep(500);
+        }
+        catch (err) {
+          lastError = err;
+          if (attemptNum < retryOptions.maxRetryAttempts) {
+            console.log('@retry - Retrying..');
+            await sleep(retryOptions.delay);
+          }
         }
       }
-    }
 
-    throw lastError;
+      throw lastError;
+    }
+    return resultMethod;
   }
 
-  return resultMethod;
+  
 }
 class WeatherAPI {
   apiVersion = 'v1'
 
-  @retry
+  @retry({maxRetryAttempts: 4, delay: 2000})
   async getWeather(city) {
     console.log(`Getting weather for ${city}`)
 
