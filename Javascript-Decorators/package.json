@@ -6,6 +6,7 @@
   "scripts": {
     "build": "babel src -d lib",
     "start-app": "npm run build && node lib/app.js",
+    "start-validation-app": "npm run build && node lib/test-validation.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ivan Mushketyk",
