@@ -1,0 +1,23 @@
+{
+  "name": "pluralsight-javascript-decorators",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src -d lib",
+    "start-app": "npm run build && node lib/app.js",
+    "start-validation-app": "npm run build && node lib/test-validation.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ivan Mushketyk",
+  "type": "module",
+  "license": "",
+  "devDependencies": {
+    "@babel/cli": "^7.23.9",
+    "@babel/core": "^7.23.9",
+    "@babel/plugin-proposal-decorators": "^7.23.9"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
